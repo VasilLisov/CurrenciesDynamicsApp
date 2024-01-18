@@ -1,0 +1,171 @@
+﻿<Window
+    x:Class="CurrenciesDynamicsApp.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+    Width="650"
+    Height="350"
+    Title="MainWindow"
+    FontFamily="Tahoma">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.2*" />
+            <ColumnDefinition Width="0.2*" />
+            <ColumnDefinition Width="0.4*" />
+            <ColumnDefinition Width="0.2*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*" />
+            <RowDefinition Height="0.4*" />
+            <RowDefinition Height="0.4*" />
+            <RowDefinition Height="0.1*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Column="0"
+            Grid.Row="0"
+            Style="{StaticResource LayoutHeader}"
+            Text="Currencies" />
+
+        <TextBlock
+            Grid.Column="1"
+            Grid.Row="0"
+            Style="{StaticResource LayoutHeader}"
+            Text="Details" />
+
+        <TextBlock
+            Grid.Column="2"
+            Grid.Row="0"
+            Style="{StaticResource LayoutHeader}"
+            Text="Main currencies chart" />
+
+        <TextBlock
+            Grid.Column="3"
+            Grid.Row="0"
+            Style="{StaticResource LayoutHeader}"
+            Text="Options" />
+
+
+        <ListBox
+            Grid.Column="0"
+            Grid.Row="1"
+            ItemsSource="{Binding CurrencyInfos}"
+            SelectedItem="{Binding SelectedCurrencyInfo}"
+            Margin="5, 0"
+            Grid.RowSpan="2">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock Text="{Binding Path=Cur_Abbreviation}" />
+                        <TextBlock Text="{Binding Path=Cur_Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            DataContext="{Binding SelectedCurrencyInfo}"
+            Grid.RowSpan="2">
+            <TextBlock
+                Text="Date"
+                IsEnabled="False"
+                Style="{StaticResource DescriptionItemHeader}"/>
+            <TextBlock
+                Margin="0, 0, 0, 10"
+                Text="{Binding Date, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock
+                Text="Abbreviation"
+                Style="{StaticResource DescriptionItemHeader}"/>
+            <TextBox
+                Margin="0, 0, 0, 10"
+                Text="{Binding Cur_Abbreviation, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock
+                Text="Name"
+                IsEnabled="False"
+                Style="{StaticResource DescriptionItemHeader}"/>
+            <TextBlock
+                Margin="0, 0, 0, 10"
+                Text="{Binding Cur_Name, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock
+                Text="Official Rate"
+                Style="{StaticResource DescriptionItemHeader}"/>
+            <TextBox Text="{Binding Cur_OfficialRate, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+
+        <DockPanel
+            Grid.Column="2"
+            Grid.Row="1"
+            Grid.RowSpan="2">
+            <Grid>
+                <telerik:RadCartesianChart>
+                    <telerik:RadCartesianChart.HorizontalAxis>
+                        <telerik:CategoricalAxis />
+                    </telerik:RadCartesianChart.HorizontalAxis>
+                    <telerik:RadCartesianChart.VerticalAxis>
+                        <telerik:LinearAxis/>
+                    </telerik:RadCartesianChart.VerticalAxis>
+
+                    <telerik:RadCartesianChart.Series>
+                        <telerik:BarSeries
+                            x:Name="barSeries"
+                            CategoryBinding="Cur_Abbreviation"
+                            ValueBinding="Cur_OfficialRate" 
+                            ItemsSource="{Binding MainCurrenciesInfos}"/>
+                    </telerik:RadCartesianChart.Series>
+                </telerik:RadCartesianChart>
+            </Grid>
+
+        </DockPanel>
+ 
+        <StackPanel
+            x:Name="DownloadDataStackPanel"
+            Grid.Column="3"
+            Grid.Row="1"
+            Orientation="Vertical">
+            
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                Text="Choose Date" />
+            
+            <DatePicker
+                Margin="10 5"
+                DisplayDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged}"
+                SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged}">
+            </DatePicker>
+
+            <Button
+                Command="{Binding DownloadFromRemoteCommand}"
+                Margin="10 5" Content="Download">
+            </Button>
+        </StackPanel>
+
+        <StackPanel
+            x:Name="FileManipulationStackPanel"
+            Grid.Column="3"
+            Grid.Row="2"
+            Orientation="Vertical"
+            VerticalAlignment="Bottom">
+            <Button
+                Command="{Binding OpenFromFileCommand}"
+                Margin="10 5" Content="Open file">
+            </Button>
+            <Button
+                Command="{Binding SaveToFileCommand}"
+                Margin="10 5" Content="Save file">
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
