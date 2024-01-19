@@ -12,19 +12,11 @@
         public int Cur_ID
         {
             get => this.currencyInfo.Cur_ID;
-            set
-            {
-                OnPropertyChanged(nameof(Cur_ID));
-            }
         }
        
         public string Date
         {
             get => this.currencyInfo.Date.ToShortDateString();
-            set
-            {
-                OnPropertyChanged(nameof(Date));
-            }
         }
         
         public string Cur_Abbreviation
@@ -40,10 +32,6 @@
         public string Cur_Name
         {
             get => this.currencyInfo.Cur_Name;
-            set
-            {
-                OnPropertyChanged(nameof(Cur_Name));
-            }
         }
         
         public decimal? Cur_OfficialRate
